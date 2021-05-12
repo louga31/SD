@@ -11,18 +11,24 @@ digraph ThreadedBinaryTree {
 	n1 [label="{{<parent>}|1|{<left>|<right>}}"];
 	lnil1 [style=filled, fillcolor=dodgerblue, label="NIL"];
 	n1:left:c -> lnil1:n [headclip=false, tailclip=false, color=dodgerblue]
-	n1:right:s -> n2:left:s [style=dashed, headclip=false, tailclip=false, color=aquamarine4]
+	rnil1 [style=filled, fillcolor=dodgerblue, label="NIL"];
+	n1:right:c -> rnil1:n [headclip=false, tailclip=false, color=dodgerblue]
 	n3 [label="{{<parent>}|3|{<left>|<right>}}"];
-	n3:left:s -> n2:right:s [style=dashed, headclip=false, tailclip=false, color=crimson]
-	n3:right:s -> n4:left:s [style=dashed, headclip=false, tailclip=false, color=aquamarine4]
+	lnil3 [style=filled, fillcolor=dodgerblue, label="NIL"];
+	n3:left:c -> lnil3:n [headclip=false, tailclip=false, color=dodgerblue]
+	rnil3 [style=filled, fillcolor=dodgerblue, label="NIL"];
+	n3:right:c -> rnil3:n [headclip=false, tailclip=false, color=dodgerblue]
 	n6 [label="{{<parent>}|6|{<left>|<right>}}"];
 	n6:left:c -> n5:parent:c [headclip=false, tailclip=false]
 	n6:right:c -> n7:parent:c [headclip=false, tailclip=false]
 	n5 [label="{{<parent>}|5|{<left>|<right>}}"];
-	n5:left:s -> n4:right:s [style=dashed, headclip=false, tailclip=false, color=crimson]
-	n5:right:s -> n6:left:s [style=dashed, headclip=false, tailclip=false, color=aquamarine4]
+	lnil5 [style=filled, fillcolor=dodgerblue, label="NIL"];
+	n5:left:c -> lnil5:n [headclip=false, tailclip=false, color=dodgerblue]
+	rnil5 [style=filled, fillcolor=dodgerblue, label="NIL"];
+	n5:right:c -> rnil5:n [headclip=false, tailclip=false, color=dodgerblue]
 	n7 [label="{{<parent>}|7|{<left>|<right>}}"];
-	n7:left:s -> n6:right:s [style=dashed, headclip=false, tailclip=false, color=crimson]
+	lnil7 [style=filled, fillcolor=dodgerblue, label="NIL"];
+	n7:left:c -> lnil7:n [headclip=false, tailclip=false, color=dodgerblue]
 	rnil7 [style=filled, fillcolor=dodgerblue, label="NIL"];
 	n7:right:c -> rnil7:n [headclip=false, tailclip=false, color=dodgerblue]
 

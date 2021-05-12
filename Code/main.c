@@ -1,6 +1,8 @@
 #include "tbstree.h"
 #include <stdio.h>
 #include <memory.h>
+#include <stdlib.h>
+#include <string.h>
 
 /**
  * This function output one node using the <a href="https://www.graphviz.org/documentation/">dot</a> syntax.
@@ -29,7 +31,7 @@ void node_to_dot(const ThreadedBinaryTree *t, void *userData) {
     fprintf(file, "\tn%d [label=\"{{<parent>}|%d|{<left>|<right>}}\"];\n",
             tbstree_root(t), tbstree_root(t));
 
-    if (!tbstree_leftthreaded(t)) {
+    if (!tbstree_isleftthreaded(t)) {
         if (tbstree_left(t)) {
             fprintf(file, "\tn%d:left:c -> n%d:parent:c [headclip=false, tailclip=false]\n",
                     tbstree_root(t), tbstree_root(tbstree_left(t)));
@@ -42,7 +44,7 @@ void node_to_dot(const ThreadedBinaryTree *t, void *userData) {
         fprintf(file, "\tn%d:left:s -> n%d:right:s [style=dashed, headclip=false, tailclip=false, color=crimson]\n",
                         tbstree_root(t), tbstree_root(tbstree_left(t)));
     }
-    if (!tbstree_rightthreaded(t)) {
+    if (!tbstree_isrightthreaded(t)) {
         if (tbstree_right(t)) {
             fprintf(file, "\tn%d:right:c -> n%d:parent:c [headclip=false, tailclip=false]\n",
                     tbstree_root(t), tbstree_root(tbstree_right(t)));
@@ -107,7 +109,7 @@ int main(int argc, char **argv) {
     tbstree_depth_infix(theTree, print_tree, NULL);
     printf("\nDone.\n");
 
-    char dotname[strlen(argv[1])+1];
+    char* dotname = malloc(sizeof(char) * strlen(argv[1]) + 1);
     strncpy(dotname, argv[1], strlen(argv[1])+1);
     strncpy(dotname+strlen(dotname)-3, "dot", 3);
     printf("Exporting the tree to %s.\n\t", dotname);

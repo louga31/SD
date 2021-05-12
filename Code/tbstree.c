@@ -103,9 +103,9 @@ ThreadedBinaryTree *bstree_predecessor(const ThreadedBinaryTree *x) {
 /**                               Control start here                                  **/
 /***************************************************************************************/
 /**
- *  Nom         :
- *  Prenom      :
- *  Num Etud    :
+ *  Nom         : Ormancey
+ *  Prenom      : Quentin
+ *  Num Etud    : 21808876
  **/
 
 /*
@@ -120,8 +120,29 @@ void fix_tree_threads(ptrThreadedBinaryTree current) {
  *  Exercice 3 : Etablir l'invariant des arbres cousus après insertion
  */
 void tbstree_add(ptrThreadedBinaryTree *t, int v) {
-    /* Exercice 1 */
-    /* Add the value into the Binary search tree */
+    ptrThreadedBinaryTree* cur = t;
+    ThreadedBinaryTree* par = NULL;
+    bool isleft = true;
+    bool isthread = false;
+    while (*cur || isthread)
+    {
+        par = *cur;
+        if ((*cur)->root == v)
+            return;
+		if ((*cur)->root > v)
+		{
+            isleft = true;
+            isthread = (*cur)->leftthread;
+            cur = &(*cur)->left;
+		} else
+		{
+            isleft = false;
+            isthread = (*cur)->rightthread;
+            cur = &(*cur)->right;
+		}
+    }
+    *cur = tbstree_cons(v);
+    (*cur)->parent = par;
 
     /* Exercice 3 */
     /* Fix threads on the new inserted node */
@@ -131,9 +152,19 @@ void tbstree_add(ptrThreadedBinaryTree *t, int v) {
  * Exercice 2 : Parcours classiques de l'arbre
  */
 void tbstree_depth_infix(const ThreadedBinaryTree *t, OperateFunctor f, void *userData) {
+    if (tbstree_empty(t))
+        return;
+    tbstree_depth_infix(t->left, f, userData);
+    f(t, userData);
+    tbstree_depth_infix(t->right, f, userData);
 }
 
 void tbstree_depth_prefix(const ThreadedBinaryTree *t, OperateFunctor f, void *userData) {
+    if (tbstree_empty(t))
+        return;
+    f(t, userData);
+    tbstree_depth_prefix(t->left, f, userData);
+    tbstree_depth_prefix(t->right, f, userData);
 }
 
 /*
