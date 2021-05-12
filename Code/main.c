@@ -110,8 +110,8 @@ int main(int argc, char **argv) {
     printf("\nDone.\n");
 
     char* dotname = malloc(sizeof(char) * strlen(argv[1]) + 1);
-    strncpy(dotname, argv[1], strlen(argv[1])+1);
-    strncpy(dotname+strlen(dotname)-3, "dot", 3);
+    strcpy(dotname, argv[1]);
+    strcpy(dotname+strlen(dotname)-3, "dot");
     printf("Exporting the tree to %s.\n\t", dotname);
     FILE *output = fopen(dotname, "w");
     fprintf(output, "digraph ThreadedBinaryTree {\n\tgraph [ranksep=0.75, nodesep = 0.75];\n\tnode [shape = record];\n\n");

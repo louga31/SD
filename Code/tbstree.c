@@ -112,7 +112,19 @@ ThreadedBinaryTree *bstree_predecessor(const ThreadedBinaryTree *x) {
  * Exercice 3 : rétablissement de l'invariant de structure.
  */
 void fix_tree_threads(ptrThreadedBinaryTree current) {
-
+    current->left = bstree_predecessor(current);
+	if (current->left)
+		current->leftthread = true;
+    current->right = bstree_successor(current);
+    if (current->right)
+		current->rightthread = true;
+	if (current->parent)
+	{
+        if (current->parent->left == current)
+            current->parent->leftthread = false;
+        else
+            current->parent->rightthread = false;
+	}
 }
 
 /*
@@ -122,30 +134,27 @@ void fix_tree_threads(ptrThreadedBinaryTree current) {
 void tbstree_add(ptrThreadedBinaryTree *t, int v) {
     ptrThreadedBinaryTree* cur = t;
     ThreadedBinaryTree* par = NULL;
-    bool isleft = true;
     bool isthread = false;
-    while (*cur || isthread)
+    while (*cur && !isthread)
     {
         par = *cur;
         if ((*cur)->root == v)
             return;
-		if ((*cur)->root > v)
-		{
-            isleft = true;
+        if ((*cur)->root > v)
+        {
             isthread = (*cur)->leftthread;
             cur = &(*cur)->left;
-		} else
-		{
-            isleft = false;
+        }
+        else
+        {
             isthread = (*cur)->rightthread;
             cur = &(*cur)->right;
-		}
+        }
     }
     *cur = tbstree_cons(v);
     (*cur)->parent = par;
 
-    /* Exercice 3 */
-    /* Fix threads on the new inserted node */
+    fix_tree_threads(*cur);
 }
 
 /*
@@ -153,22 +162,35 @@ void tbstree_add(ptrThreadedBinaryTree *t, int v) {
  */
 void tbstree_depth_infix(const ThreadedBinaryTree *t, OperateFunctor f, void *userData) {
     if (tbstree_empty(t))
-        return;
-    tbstree_depth_infix(t->left, f, userData);
+		return;
+	if (t->leftthread)
+        tbstree_depth_infix(NULL, f, userData);
+    else
+		tbstree_depth_infix(t->left, f, userData);
     f(t, userData);
-    tbstree_depth_infix(t->right, f, userData);
+    if (t->rightthread)
+        tbstree_depth_infix(NULL, f, userData);
+    else
+        tbstree_depth_infix(t->right, f, userData);
 }
 
 void tbstree_depth_prefix(const ThreadedBinaryTree *t, OperateFunctor f, void *userData) {
     if (tbstree_empty(t))
         return;
     f(t, userData);
-    tbstree_depth_prefix(t->left, f, userData);
-    tbstree_depth_prefix(t->right, f, userData);
+    if (t->leftthread)
+        tbstree_depth_prefix(NULL, f, userData);
+    else
+        tbstree_depth_prefix(t->left, f, userData);
+    if (t->rightthread)
+        tbstree_depth_prefix(NULL, f, userData);
+    else
+        tbstree_depth_prefix(t->right, f, userData);
 }
 
 /*
  * Exercice 4 - parcours de l'arbre en utilisant les coutures
  */
 void tbstree_inorder(const ThreadedBinaryTree *t, OperateFunctor f, void *userData) {
+	
 }
