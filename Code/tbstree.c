@@ -192,5 +192,34 @@ void tbstree_depth_prefix(const ThreadedBinaryTree *t, OperateFunctor f, void *u
  * Exercice 4 - parcours de l'arbre en utilisant les coutures
  */
 void tbstree_inorder(const ThreadedBinaryTree *t, OperateFunctor f, void *userData) {
+    const ThreadedBinaryTree* current = t;
+    const ThreadedBinaryTree* next = t->parent;
+    const ThreadedBinaryTree* prev = t->parent;
+
+	while (current->left != NULL)
+	{
+        current = current->left;
+	}
 	
+    while (!tbstree_empty(current))
+    {
+		if (current->left && current->left != prev && !current->leftthread)
+        {
+            prev = current;
+            current = current->left;
+        }
+        else
+        {
+            f(current, userData);
+			if (current->parent && current->right && current->parent != current->right)
+			{
+                prev = current->right->left;
+			} else
+			{
+                prev = current;
+			}
+            
+            current = current->right;
+        }
+    }
 }
